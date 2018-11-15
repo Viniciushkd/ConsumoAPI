@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import br.com.marcosvinicius.consumoapi.api.PokemonAPI
 import br.com.marcosvinicius.consumoapi.model.Pokemon
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_search.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,12 +47,15 @@ class SearchActivity : AppCompatActivity() {
                 if(response?.isSuccessful == true){
                     val pokemon = response.body()
                     txPokemon.text = pokemon?.name
+                    Picasso.get().load(pokemon?.sprites?.frontDefault)
+                            .placeholder(R.drawable.find)
+                            .error(R.drawable.notf)
+                            .into(ivPokemon);
                 } else {
-                    Toast.makeText(
-                            this@SearchActivity,
-                            "Não achou",
-                            Toast.LENGTH_LONG)
-                            .show()
+                    txPokemon.text = "Não Encontrado"
+
+                    Picasso.get().load(R.drawable.notf)
+                            .into(ivPokemon);
                 }
             }
         })
