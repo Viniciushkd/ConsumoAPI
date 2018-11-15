@@ -12,6 +12,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.facebook.stetho.okhttp3.StethoInterceptor
+import okhttp3.OkHttpClient
+
+
 
 
 class SearchActivity : AppCompatActivity() {
@@ -25,9 +29,14 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun serach() {
+        val okhttp = OkHttpClient.Builder()
+                .addNetworkInterceptor(StethoInterceptor())
+                .build();
+
         val retrofit = Retrofit.Builder()
                 .baseUrl("https://pokeapi.co")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(okhttp)
                 .build()
 
         val pokemonAPI = retrofit.create(PokemonAPI::class.java)
